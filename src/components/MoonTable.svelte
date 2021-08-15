@@ -179,7 +179,7 @@
     width: 100%;
     height: 100%;
     line-height: 2.875rem;
-    border: 1px solid #333;
+    border: 1px solid var(--dark-text-medium-emphasis);
     font-size: 1.25rem;
     font-weight: 500;
   }
@@ -194,7 +194,7 @@
     border-left-width: 0;
   }
   .yk-type-switch input:checked + label {
-    background-color: lightgrey;
+    background-color: var(--dark-bg);
   }
   .yk-type-switch input#yk-type-switch-moon:checked + label {
     border-right-width: 1px;
@@ -203,7 +203,7 @@
     border-left-width: 1px;
   }
   .yk-type-switch input:focus + label {
-    box-shadow: 0 0 0 1px #333;
+    box-shadow: 0 0 0 1px var(--dark-text-medium-emphasis);
   }
   .yk-moon-table-input-icon {
     display: flex;
@@ -226,8 +226,8 @@
   .yk-moon-table-input {
     width: 100%;
     border-radius: 0.25rem;
-    background-color: lightgrey;
-    border: 1px solid #333;
+    background-color: var(--dark-bg);
+    border: 1px solid var(--dark-text-medium-emphasis);
     font-size: 1.25rem;
     font-weight: 500;
     text-align: center;
@@ -235,26 +235,26 @@
   .yk-moon-table-body {
     width: 100%;
     overflow-x: auto;
-    border: 1px solid black;
+    border: 1px solid var(--dark-text-medium-emphasis);
   }
   .yk-moon-table-row.yk-moon-table-days {
-    background-color: lightgrey;
+    background-color: var(--dark-bg);
     font-weight: bold;
     border-bottom-style: double;
     border-bottom-width: 5px;
   }
   .yk-moon-table-row {
-    background-color: white;
+    background-color: var(--dark-body);
     display: grid;
     grid-template-columns: 5.625rem repeat(28, calc((100% - 5.625rem) / 28));
-    border: solid black;
+    border: solid var(--dark-text-medium-emphasis);
     border-width: 0 0 1px 0;
   }
   .yk-moon-table-row:last-of-type {
     border-bottom-width: 0;
   }
   .yk-moon-table-col {
-    border: solid black;
+    border: solid var(--dark-text-medium-emphasis);
     border-width: 0 1px 0 0;
     padding: 0.5rem;
     min-width: 22px;
@@ -266,6 +266,7 @@
     position: relative;
   }
   .yk-y-axis-label {
+    color: var(--dark-text-high-emphasis);
     position: sticky;
     left: 0;
     background: inherit;

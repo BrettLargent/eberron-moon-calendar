@@ -24,8 +24,8 @@
 
 <style>
   :root {
-    --front-color: yellow;
-    --back-color: #333;
+    --front-color: #fff;
+    --back-color: #121212;
   }
   .moon-container {
     position: absolute;
@@ -35,7 +35,7 @@
   .moon {
     width: 24px;
     height: 24px;
-    border: 2px solid red;
+    border: 2px solid var(--bs-gray-600);
     border-radius: 50%;
     overflow: hidden;
     position: relative;
@@ -43,9 +43,6 @@
     transform: translateZ(0);
   }
 
-  /* .waning.moon {
-    background-color: var(--back-color);
-  } */
   .waxing.moon {
     background-color: var(--front-color);
   }
@@ -62,9 +59,6 @@
     z-index: -1;
   }
 
-  /* .waning.moon::before {
-    background-color: var(--front-color);
-  } */
   .waxing.moon::before {
     background-color: var(--back-color);
   }

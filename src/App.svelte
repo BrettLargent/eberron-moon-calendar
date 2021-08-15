@@ -1,13 +1,13 @@
 <script>
   import MoonTable from "./components/MoonTable.svelte";
   import { YKDate } from "./utils/data.js";
-  let ykDate = new YKDate(1, 0, 948);
+  let ykDate = new YKDate(1, 0, 998);
 </script>
 
 <main>
   <!-- 
     TODO
-      - Improve styling
+      - Improve moon phase logic
       - Handle breakpoints
   -->
   <div class="container">

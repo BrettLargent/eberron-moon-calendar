@@ -1,3 +1,10 @@
+:root {
+  --dark-body: #292929;
+  --dark-bg: #121212;
+  --dark-text-high-emphasis: #ffffffde;
+  --dark-text-medium-emphasis: #ffffff99;
+}
+
 html,
 body {
   position: relative;
@@ -6,7 +13,8 @@ body {
 }
 
 body {
-  color: #333;
+  background-color: var(--dark-body);
+  color: var(--dark-text-high-emphasis);
   margin: 0;
   padding: 8px;
   box-sizing: border-box;
@@ -43,6 +51,7 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
+  color: var(--dark-text-high-emphasis);
 }
 
 input[type="number"]::-webkit-inner-spin-button,
