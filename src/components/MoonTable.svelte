@@ -59,7 +59,7 @@
 <div class="yk-moon-table">
   <h1>{headerStr}</h1>
   <div class="yk-moon-table-header row mb-2">
-    <div class="yk-moon-table-header-group col-5 col-xl-3">
+    <div class="yk-moon-table-header-group col-12 col-md-5 col-xl-3">
       <div class="yk-type-switch">
         <div class="yk-type-switch-btn">
           <input
@@ -84,7 +84,7 @@
       </div>
     </div>
     <div
-      class="yk-moon-table-header-group col-3 offset-1 offset-xl-3"
+      class="yk-moon-table-header-group col-6 col-md-3 offset-md-1 offset-xl-3"
       on:wheel|preventDefault={(event) => (mm += event.deltaY > 0 ? -1 : 1)}
     >
       <div
@@ -108,7 +108,7 @@
       </div>
     </div>
     <div
-      class="yk-moon-table-header-group col-3"
+      class="yk-moon-table-header-group col-6 col-md-3"
       on:wheel|preventDefault={(event) => (yyyy += event.deltaY > 0 ? -1 : 1)}
     >
       <div
@@ -130,7 +130,11 @@
     <div class="yk-moon-table-row yk-moon-table-days">
       <div class="yk-moon-table-col yk-y-axis-label">{type}</div>
       {#each { length: 28 } as _, day}
-        <div class="yk-moon-table-col">{day + 1}</div>
+        <div class="yk-moon-table-col">
+          <div class="col-center-align">
+            {day + 1}
+          </div>
+        </div>
       {/each}
     </div>
     {#each { length: 12 } as _, row}
@@ -243,9 +247,18 @@
     border-bottom-style: double;
     border-bottom-width: 5px;
   }
+  .yk-moon-table-row.yk-moon-table-days .yk-moon-table-col:not(:first-of-type) {
+    position: relative;
+  }
+  .col-center-align {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .yk-moon-table-row {
     background-color: var(--dark-body);
     display: grid;
+    width: 100%;
     grid-template-columns: 5.625rem repeat(28, calc((100% - 5.625rem) / 28));
     border: solid var(--dark-text-medium-emphasis);
     border-width: 0 0 1px 0;
@@ -271,5 +284,16 @@
     left: 0;
     background: inherit;
     z-index: 1;
+  }
+  @media (max-width: 991.98px) {
+    .yk-moon-table-row {
+      width: calc(5.625rem + 28 * 40px);
+      grid-template-columns: 5.625rem repeat(28, calc(40px));
+    }
+  }
+  @media (max-width: 767.98px) {
+    .yk-moon-table-header-group:first-of-type {
+      margin-bottom: 0.5rem;
+    }
   }
 </style>
