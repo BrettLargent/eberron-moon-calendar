@@ -194,6 +194,7 @@
     height: 0;
   }
   .yk-type-switch label {
+    color: var(--dark-text-medium-emphasis);
     width: 100%;
     height: 100%;
     line-height: 2.875rem;
@@ -213,6 +214,7 @@
     border-left-width: 0;
   }
   .yk-type-switch input:checked + label {
+    color: var(--dark-text-high-emphasis);
     background-color: var(--dark-bg);
   }
   .yk-type-switch input#yk-type-switch-moon:checked + label {
