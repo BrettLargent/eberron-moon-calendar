@@ -2,51 +2,60 @@
   import feather from "feather-icons";
   import { onMount } from "svelte";
   import { EberronData, YKDate } from "../utils/data.js";
+  import FormSelect from "./FormSelect.svelte";
   import Moon from "./Moon.svelte";
-  export let selectedDate = new YKDate(1, 0, 998);
-  export let type = "Moon";
 
-  const yLabel = { Month: "MONTHS", Moon: "LUNAR_ORDER" };
-  let { mm, yyyy } = selectedDate;
-  let headerStr = "";
-  let monthStr = EberronData.MONTHS[mm];
+  export let year = 998;
+  export let moonth = "Zarantyr";
+  export let type = "Month"; // Moons by [Month] || Months by [Moon]
 
-  $: {
-    if (type === "Moon") {
-      headerStr = `Moon phases for the month of ${monthStr}`;
-    } else {
-      headerStr = `Phases of ${monthStr} by Month`;
+  const yLabel = { Month: "MOONS", Moon: "MONTHS" };
+  const moonthIdxProperty = { Month: "month_idx", Moon: "moon_idx" };
+  let selectedMoonth = 0;
+  let moonthStr = moonth;
+
+  $: moonth && moonthPropWatcher();
+  $: typeof selectedMoonth === "number" && updatedMoonthStr();
+  $: type && updateTypeView();
+  $: headerStr =
+    type === "Month"
+      ? `Moon phases for the month of ${moonthStr}`
+      : `Phases of ${moonthStr} by Month`;
+
+  function updateTypeView() {
+    selectedMoonth =
+      EberronData.MOONTH_DATA[moonthStr][moonthIdxProperty[type]];
+  }
+  function updatedMoonthStr() {
+    if (selectedMoonth > 11) {
+      selectedMoonth -= 12;
+    } else if (selectedMoonth < 0) {
+      selectedMoonth += 12;
     }
+    moonthStr = EberronData[`${type.toUpperCase()}S`][selectedMoonth];
   }
-  $: {
-    if (mm > 11) {
-      mm -= 12;
-    } else if (mm < 0) {
-      mm += 12;
-    }
-    selectedDate.mm = mm;
-    monthStr = EberronData.MONTHS[mm];
+  function moonthPropWatcher() {
+    selectedMoonth = EberronData.MOONTH_DATA[moonth][moonthIdxProperty[type]];
   }
-  $: {
-    selectedDate.yyyy = yyyy;
-  }
-
   function getMoonData(date, moon) {
-    const convergenceDate = EberronData.FULL_MOON_CONVERGENCE;
+    const convergenceDate = EberronData.LAST_FULL_MOON_CONVERGENCE;
     const yearDiff = (date.yyyy - convergenceDate.yyyy) * 12 * 28;
     const monthDiff = (date.mm - convergenceDate.mm) * 28;
     const dayDiff = date.dd - convergenceDate.dd + monthDiff + yearDiff;
-    return { days: dayDiff % (EberronData.MOONS[moon].lunar_cycle * 7), moon };
+    return {
+      days: dayDiff % (EberronData.MOONTH_DATA[moon].lunar_cycle * 7),
+      moon,
+    };
   }
-  function handleKeyDown(event) {
-    if ({ ArrowUp: 1, ArrowRight: 1 }[event.key]) {
+  function handleYearInputKeydown(event) {
+    if (event.key === "ArrowDown") {
       event.preventDefault();
-      mm += 1;
+      year += 1;
       return;
     }
-    if ({ ArrowDown: 1, ArrowLeft: 1 }[event.key]) {
+    if (event.key === "ArrowUp") {
       event.preventDefault();
-      mm -= 1;
+      year -= 1;
       return;
     }
   }
@@ -60,75 +69,80 @@
   <h1>{headerStr}</h1>
   <div class="yk-moon-table-header row mb-2">
     <div class="yk-moon-table-header-group col-12 col-md-5 col-xl-3">
-      <div class="yk-type-switch">
+      <div class="yk-type-switch cursor-pointer">
         <div class="yk-type-switch-btn">
           <input
             id="yk-type-switch-moon"
             type="radio"
             name="yk-type-switch"
-            value="Moon"
+            value="Month"
             bind:group={type}
           />
-          <label for="yk-type-switch-moon">Moon View</label>
+          <label for="yk-type-switch-moon">Month View</label>
         </div>
         <div class="yk-type-switch-btn">
           <input
             id="yk-type-switch-month"
             type="radio"
             name="yk-type-switch"
-            value="Month"
+            value="Moon"
             bind:group={type}
           />
-          <label for="yk-type-switch-month">Month View</label>
+          <label for="yk-type-switch-month">Moon View</label>
         </div>
       </div>
     </div>
     <div
       class="yk-moon-table-header-group col-6 col-md-3 offset-md-1 offset-xl-3"
-      on:wheel|preventDefault={(event) => (mm += event.deltaY > 0 ? -1 : 1)}
     >
-      <div
-        class="yk-moon-table-input-icon yk-moon-table-input-icon-left"
-        on:click={() => (mm -= 1)}
-      >
-        <i data-feather="chevron-left" />
-      </div>
-      <input
-        class="yk-moon-table-input month-input"
-        type="text"
-        readonly
-        bind:value={monthStr}
-        on:keydown={handleKeyDown}
+      <FormSelect
+        bind:value={selectedMoonth}
+        options={EberronData[`${type.toUpperCase()}S`]}
       />
-      <div
-        class="yk-moon-table-input-icon yk-moon-table-input-icon-right"
-        on:click={() => (mm += 1)}
-      >
-        <i data-feather="chevron-right" />
-      </div>
     </div>
-    <div
-      class="yk-moon-table-header-group col-6 col-md-3"
-      on:wheel|preventDefault={(event) => (yyyy += event.deltaY > 0 ? -1 : 1)}
-    >
+    <div class="yk-moon-table-header-group col-6 col-md-3">
       <div
-        class="yk-moon-table-input-icon yk-moon-table-input-icon-left"
-        on:click={() => (yyyy += 1)}
+        class="yk-moon-table-input-year position-relative"
+        on:wheel|preventDefault={(event) => (year += event.deltaY > 0 ? 1 : -1)}
       >
-        <i data-feather="chevron-left" />
-      </div>
-      <input class="yk-moon-table-input" type="number" bind:value={yyyy} />
-      <div
-        class="yk-moon-table-input-icon yk-moon-table-input-icon-right"
-        on:click={() => (yyyy -= 1)}
-      >
-        <i data-feather="chevron-right" />
+        <input
+          class="yk-moon-table-input"
+          type="number"
+          bind:value={year}
+          on:keydown={handleYearInputKeydown}
+          on:blur={() => {
+            if (!year) {
+              year = 0;
+            }
+          }}
+        />
+        <input
+          class="yk-moon-table-input yk-moon-table-input-label"
+          type="text"
+          readonly
+          value={`${year} YK`}
+          tabindex="-1"
+        />
+        <div
+          class="yk-moon-table-input-icon yk-moon-table-input-icon-up"
+          on:click={() => (year -= 1)}
+        >
+          <i data-feather="chevron-up" />
+        </div>
+        <div
+          class="yk-moon-table-input-icon yk-moon-table-input-icon-down"
+          on:click={() => (year += 1)}
+        >
+          <i data-feather="chevron-down" />
+        </div>
       </div>
     </div>
   </div>
   <div class="yk-moon-table-body">
     <div class="yk-moon-table-row yk-moon-table-days">
-      <div class="yk-moon-table-col yk-y-axis-label">{type}</div>
+      <div class="yk-moon-table-col yk-y-axis-label">
+        {type === "Month" ? "Moon" : "Month"}
+      </div>
       {#each { length: 28 } as _, day}
         <div class="yk-moon-table-col">
           <div class="col-center-align">
@@ -146,7 +160,7 @@
           <div class="yk-moon-table-col moon-container">
             <Moon
               moonData={getMoonData(
-                new YKDate(day + 1, selectedDate.mm, selectedDate.yyyy),
+                new YKDate(day + 1, selectedMoonth, year),
                 EberronData[yLabel[type]][row]
               )}
             />
@@ -186,6 +200,7 @@
     border: 1px solid var(--dark-text-medium-emphasis);
     font-size: 1.25rem;
     font-weight: 500;
+    cursor: pointer;
   }
   .yk-type-switch input#yk-type-switch-moon,
   .yk-type-switch input#yk-type-switch-moon + label {
@@ -211,21 +226,17 @@
   }
   .yk-moon-table-input-icon {
     display: flex;
-    align-items: center;
     position: absolute;
-    bottom: 50%;
-    transform: translateY(50%);
     cursor: pointer;
     user-select: none;
   }
-  .yk-moon-table-input-icon-left {
-    left: 0.75rem;
+  .yk-moon-table-input-icon-up {
+    right: 0.25rem;
+    top: 0.125rem;
   }
-  .yk-moon-table-input-icon-right {
-    right: 0.75rem;
-  }
-  .month-input {
-    cursor: default;
+  .yk-moon-table-input-icon-down {
+    right: 0.25rem;
+    bottom: 0.125rem;
   }
   .yk-moon-table-input {
     width: 100%;
@@ -235,6 +246,15 @@
     font-size: 1.25rem;
     font-weight: 500;
     text-align: center;
+  }
+  .yk-moon-table-input-label {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+  }
+  .yk-moon-table-input:focus + .yk-moon-table-input-label {
+    display: none;
   }
   .yk-moon-table-body {
     width: 100%;

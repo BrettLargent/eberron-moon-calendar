@@ -1,7 +1,7 @@
 <script>
   import { EberronData } from "../utils/data.js";
   export let moonData;
-  $: duration = EberronData.MOONS[moonData.moon].lunar_cycle * 7;
+  $: duration = EberronData.MOONTH_DATA[moonData.moon].lunar_cycle * 7;
   $: daysIntoDuration = moonData.days / duration;
   $: phaseClass =
     daysIntoDuration === 0

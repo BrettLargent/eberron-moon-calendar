@@ -7,13 +7,14 @@
 <main>
   <!-- 
     TODO
-      - Improve moon phase logic
-      - Handle breakpoints
+      - Improve moon phase logic / styling
+      - Improve year selection
+        - spinbutton
   -->
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <MoonTable selectedDate={ykDate} type="Moon" />
+        <MoonTable type="Month" />
       </div>
     </div>
   </div>
